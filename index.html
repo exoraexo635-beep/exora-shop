@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drop Shoulder T-Shirts Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .active-thumb { border-color: #2563eb; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 pb-12">
+
+    <!-- Header -->
+    <header class="bg-black text-white py-4 text-center sticky top-0 z-50 shadow-md">
+        <h1 class="text-xl font-bold tracking-wide">PREMIUM DROP SHOULDER T-SHIRTS</h1>
+    </header>
+
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- Product Details Banner -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-bold mb-2">পণ্যের বিবরণ (Product Details)</h2>
+            <ul class="text-sm space-y-1 text-gray-700">
+                <li>✨ <strong>Solid Color:</strong> ৳299 (220+ GSM, 100% Cotton)</li>
+                <li>✨ <strong>Acid Wash:</strong> ৳399 (200-220 GSM, 100% Cotton)</li>
+                <li>🚚 <strong>Shipping:</strong> ৳100 (Dhaka City Only)</li>
+                <li>⏳ <strong>Cancellation:</strong> 5 hours window via WhatsApp</li>
+            </ul>
+        </div>
+
+        <!-- Order Form Card -->
+        <div class="bg-white p-5 rounded-xl shadow-md border border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2">অর্ডার করুন (Place Order)</h2>
+
+            <form id="orderForm" onsubmit="handleOrder(event)" class="space-y-4">
+                
+                <!-- Category Select -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">ক্যাটাগরি (Category)</label>
+                    <select id="category" onchange="updateColors()" class="w-full p-2.5 border rounded-lg bg-gray-50 text-sm focus:ring-2 focus:ring-black outline-none">
+                        <option value="solid" data-price="299">Solid Color - ৳299</option>
+                        <option value="acid" data-price="399">Acid Wash - ৳399</option>
+                    </select>
+                </div>
+
+                <!-- Color Select -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">কালার (Color)</label>
+                    <select id="color" class="w-full p-2.5 border rounded-lg bg-gray-50 text-sm focus:ring-2 focus:ring-black outline-none">
+                        <!-- Dynamic options via JS -->
+                    </select>
+                </div>
+
+                <!-- Size Select -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">সাইজ (Size)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="border p-2.5 text-center rounded-lg cursor-pointer hover:bg-gray-100 flex items-center justify-center space-x-1 text-sm font-medium">
+                            <input type="radio" name="size" value="M" checked class="hidden"> <span>M</span>
+                        </label>
+                        <label class="border p-2.5 text-center rounded-lg cursor-pointer hover:bg-gray-100 flex items-center justify-center space-x-1 text-sm font-medium">
+                            <input type="radio" name="size" value="L" class="hidden"> <span>L</span>
+                        </label>
+                        <label class="border p-2.5 text-center rounded-lg cursor-pointer hover:bg-gray-100 flex items-center justify-center space-x-1 text-sm font-medium">
+                            <input type="radio" name="size" value="XL" class="hidden"> <span>XL</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">পরিমাণ (Quantity)</label>
+                    <div class="flex items-center space-x-3">
+                        <button type="button" onclick="adjustQty(-1)" class="w-10 h-10 border rounded-lg bg-gray-100 font-bold text-lg hover:bg-gray-200">-</button>
+                        <span id="qtyDisplay" class="text-lg font-bold w-8 text-center">1</span>
+                        <button type="button" onclick="adjustQty(1)" class="w-10 h-10 border rounded-lg bg-gray-100 font-bold text-lg hover:bg-gray-200">+</button>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Customer Details -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">আপনার নাম (Full Name)</label>
+                    <input type="text" id="custName" required placeholder="উদাহরণ: মোহাম্মদ আলী" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-black outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">মোবাইল নম্বর (11-Digit BD Number)</label>
+                    <input type="tel" id="custPhone" required placeholder="01712345678" pattern="^(013|014|015|016|017|018|019)[0-9]{8}$" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-black outline-none">
+                    <span class="text-xs text-gray-500">১১ ডিজিটের সঠিক নাম্বার দিন।</span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">ঠিকানা (Dhaka Address)</label>
+                    <textarea id="custAddress" required rows="2" placeholder="বাসা নম্বর, রোড নম্বর, এলাকা (শুধুমাত্র ঢাকা)" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-black outline-none"></textarea>
+                </div>
+
+                <!-- Payment Method -->
+                <div>
+                    <label class="block text-sm font-semibold mb-1">পেমেন্ট মেথড (Payment)</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2 border p-2.5 rounded-lg cursor-pointer">
+                            <input type="radio" name="payment" value="COD" checked onclick="toggleBkash(false)">
+                            <span class="text-sm font-medium">Cash on Delivery</span>
+                        </label>
+                        <label class="flex items-center space-x-2 border p-2.5 rounded-lg cursor-pointer">
+                            <input type="radio" name="payment" value="bKash" onclick="toggleBkash(true)">
+                            <span class="text-sm font-medium">bKash Personal (01312353430)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- bKash Sub-fields -->
+                <div id="bkashFields" class="hidden bg-gray-50 p-3 rounded-lg border space-y-2 text-xs">
+                    <p class="font-semibold text-gray-700">বিকাশ সেন্ড মানি করুন: <span class="text-black font-bold">01312353430</span></p>
+                    <input type="tel" id="bkashSender" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন" class="w-full p-2 border rounded text-xs">
+                    <input type="text" id="bkashTrx" placeholder="bKash Transaction ID (TrxID)" class="w-full p-2 border rounded text-xs">
+                </div>
+
+                <!-- Order Summary Breakdown -->
+                <div class="bg-gray-50 p-3 rounded-lg space-y-1 text-sm border">
+                    <div class="flex justify-between">
+                        <span>পণ্যের দাম (Subtotal):</span>
+                        <span id="subtotalText">৳299</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>ডেলিভারি চার্জ (Dhaka):</span>
+                        <span>৳100</span>
+                    </div>
+                    <div class="flex justify-between font-bold border-t pt-1 text-base text-black">
+                        <span>সর্বমোট (Total):</span>
+                        <span id="totalText">৳399</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center space-x-2 text-base transition">
+                    <span>Order via WhatsApp</span>
+                </button>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // WhatsApp Configuration
+        const myWhatsAppNumber = "8801312353430"; // Your WhatsApp Number
+
+        const colorOptions = {
+            solid: ["Black", "Sky Blue", "White", "Navy Blue"],
+            acid: ["Black Acid Wash", "Brown Acid Wash"]
+        };
+
+        let currentQty = 1;
+
+        function updateColors() {
+            const cat = document.getElementById("category").value;
+            const colorSelect = document.getElementById("color");
+            colorSelect.innerHTML = "";
+            
+            colorOptions[cat].forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c;
+                opt.textContent = c;
+                colorSelect.appendChild(opt);
+            });
+            calculateTotal();
+        }
+
+        function adjustQty(amount) {
+            if (currentQty + amount >= 1) {
+                currentQty += amount;
+                document.getElementById("qtyDisplay").textContent = currentQty;
+                calculateTotal();
+            }
+        }
+
+        function calculateTotal() {
+            const catSelect = document.getElementById("category");
+            const unitPrice = parseInt(catSelect.options[catSelect.selectedIndex].getAttribute("data-price"));
+            const subtotal = unitPrice * currentQty;
+            const total = subtotal + 100;
+
+            document.getElementById("subtotalText").textContent = `৳${subtotal}`;
+            document.getElementById("totalText").textContent = `৳${total}`;
+        }
+
+        function toggleBkash(show) {
+            const fields = document.getElementById("bkashFields");
+            if (show) fields.classList.remove("hidden");
+            else fields.classList.add("hidden");
+        }
+
+        function handleOrder(e) {
+            e.preventDefault();
+
+            const category = document.getElementById("category").options[document.getElementById("category").selectedIndex].text;
+            const color = document.getElementById("color").value;
+            const size = document.querySelector('input[name="size"]:checked').value;
+            const name = document.getElementById("custName").value;
+            const phone = document.getElementById("custPhone").value;
+            const address = document.getElementById("custAddress").value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const total = document.getElementById("totalText").textContent;
+
+            let bkashInfo = "";
+            if (payment === "bKash") {
+                const sender = document.getElementById("bkashSender").value;
+                const trx = document.getElementById("bkashTrx").value;
+                bkashInfo = `\n*bKash Sender:* ${sender}\n*TrxID:* ${trx}`;
+            }
+
+            // WhatsApp Message Formatting
+            const message = `🛍️ *NEW ORDER PLACED*\n--------------------------\n` +
+                `*Product:* ${category}\n` +
+                `*Color:* ${color}\n` +
+                `*Size:* ${size}\n` +
+                `*Quantity:* ${currentQty}\n\n` +
+                `👤 *Customer Info:*\n` +
+                `*Name:* ${name}\n` +
+                `*Phone:* ${phone}\n` +
+                `*Address:* ${address} (Dhaka)\n\n` +
+                `💳 *Payment:* ${payment}${bkashInfo}\n` +
+                `💰 *Total Amount:* ${total}\n--------------------------\n` +
+                `_Note: Order can be cancelled within 5 hours._`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodedMessage}`, '_blank');
+        }
+
+        // Initialize on load
+        updateColors();
+    </script>
+</body>
+  </html>
